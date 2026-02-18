@@ -7,7 +7,11 @@ import {
   getFileContents,
   instructionType,
   symbol,
+  dest,
+  comp,
+  jump,
 } from "./parser.js";
+
 
 // ----------------------------------------------------------------------------------
 
@@ -29,6 +33,13 @@ async function main() {
     if (x == "A_INSTRUCTION" || x == "L_INSTRUCTION") {
       const y = symbol(instructionString);
       console.log(`Symbol: ${y}`);
+    }
+
+    if (x == "C_INSTRUCTION") {
+      const destPart = dest(instructionString);
+      const compPart = comp(instructionString);
+      const jumpPart = jump(instructionString);
+      console.log(`dest: ${destPart}, comp: ${compPart}, jump: ${jumpPart}`)
     }
   }
 

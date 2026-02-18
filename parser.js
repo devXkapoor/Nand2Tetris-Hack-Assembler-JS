@@ -76,3 +76,37 @@ export function symbol(instructionString) {
   return z;
 }
 
+export function dest(instructionString) {
+  let z;
+  if (instructionString.includes("=")) {
+    z = instructionString.split("=")[0];
+  }
+
+  return z;
+}
+
+export function comp(instructionString) {
+  let z;
+  if (instructionString.includes("=") && instructionString.includes(";")) {
+    z = instructionString
+      .split("=")[1]
+      .split(";")[0];
+  } else if (instructionString.includes("=")) {
+    z = instructionString.split("=")[1];
+  } else if (instructionString.includes(";")) {
+    z = instructionString.split(";")[0];
+  } else {
+    z = "Invalid C-Instruction";
+  }
+
+  return z;
+}
+
+export function jump(instructionString) {
+  let z;
+  if (instructionString.includes(";")) {
+    z = instructionString.split(";")[1];
+  }
+
+  return z;
+}
