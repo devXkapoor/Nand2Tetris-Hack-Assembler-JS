@@ -39,11 +39,28 @@ export function appendContent() {
 
 export function hasMoreLines(line) {}
 
+export function advance() {}
+
 export function instructionType(instructionString) {
-
-    if(instructionString)
-
-
-    return instructionType;
-
+  if (instructionString[0] == "@") {
+    instructionString = instructionString.slice(1);
+    if (
+      parseInt(instructionString) ||
+      /^[a-zA-Z0-9]+$/.test(instructionString)
+    ) {
+      return "A_INSTRUCTION";
+    }
+  } else if (
+    instructionString.includes("=") ||
+    instructionString.includes(";")
+  ) {
+    return "C_INSTRUCTION";
+  } else if (
+    instructionString.startsWith("(") &&
+    instructionString.endsWith(")")
+  ) {
+    return "L_INSTRUCTION";
+  } else {
+    return "Invalid Instruction";
+  }
 }
