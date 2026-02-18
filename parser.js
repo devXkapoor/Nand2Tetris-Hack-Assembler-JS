@@ -46,7 +46,7 @@ export function instructionType(instructionString) {
     instructionString = instructionString.slice(1);
     if (
       parseInt(instructionString) ||
-      /^[a-zA-Z0-9]+$/.test(instructionString)
+      /^[a-zA-Z0-9_]+$/.test(instructionString)
     ) {
       return "A_INSTRUCTION";
     }
