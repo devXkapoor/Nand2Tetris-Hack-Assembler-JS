@@ -6,6 +6,7 @@ import {
   getFileName,
   getFileContents,
   instructionType,
+  symbol,
 } from "./parser.js";
 
 // ----------------------------------------------------------------------------------
@@ -21,8 +22,14 @@ async function main() {
   // advance();
 
   for (let i = 0; i < lines.length; i++) {
-    const x = instructionType(lines[i]);
-    console.log(`Line ${i} : ${x} : ${lines[i]}`);
+    const instructionString = lines[i].trim();
+    const x = instructionType(instructionString);
+    console.log(`Line ${i} : ${x} : ${instructionString}`);
+
+    if (x == "A_INSTRUCTION" || x == "L_INSTRUCTION") {
+      const y = symbol(instructionString);
+      console.log(`Symbol: ${y}`);
+    }
   }
 
   // const appendResult = await appendContent();

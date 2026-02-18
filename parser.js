@@ -64,3 +64,15 @@ export function instructionType(instructionString) {
     return "Invalid Instruction";
   }
 }
+
+export function symbol(instructionString) {
+  let z;
+  if (instructionString[0] == "@") {
+    z = instructionString.slice(1);
+  } else if (instructionString[0] == "(") {
+    z = instructionString.slice(1).split(")")[0];
+  }
+
+  return z;
+}
+
