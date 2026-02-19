@@ -50,9 +50,9 @@ export function instructionType(instructionString) {
     ) {
       return "A_INSTRUCTION";
     }
-  } else if (
+  } else if ((
     instructionString.includes("=") ||
-    instructionString.includes(";")
+    instructionString.includes(";")) && /^[a-zA-Z+-|&!0-9-1]+$/.test(instructionString)
   ) {
     return "C_INSTRUCTION";
   } else if (
@@ -76,21 +76,21 @@ export function symbol(instructionString) {
   return z;
 }
 
-export function dest(instructionString) {
+export function destSymbol(instructionString) {
   let z;
   if (instructionString.includes("=")) {
     z = instructionString.split("=")[0];
+  } else {
+    z = "null";
   }
 
   return z;
 }
 
-export function comp(instructionString) {
+export function compSymbol(instructionString) {
   let z;
   if (instructionString.includes("=") && instructionString.includes(";")) {
-    z = instructionString
-      .split("=")[1]
-      .split(";")[0];
+    z = instructionString.split("=")[1].split(";")[0];
   } else if (instructionString.includes("=")) {
     z = instructionString.split("=")[1];
   } else if (instructionString.includes(";")) {
@@ -102,10 +102,12 @@ export function comp(instructionString) {
   return z;
 }
 
-export function jump(instructionString) {
+export function jumpSymbol(instructionString) {
   let z;
   if (instructionString.includes(";")) {
     z = instructionString.split(";")[1];
+  } else {
+    z = "null";
   }
 
   return z;

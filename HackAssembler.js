@@ -7,11 +7,12 @@ import {
   getFileContents,
   instructionType,
   symbol,
-  dest,
-  comp,
-  jump,
+  destSymbol,
+  compSymbol,
+  jumpSymbol,
 } from "./parser.js";
 
+import { destCode, compCode, jumpCode } from "./code.js";
 
 // ----------------------------------------------------------------------------------
 
@@ -36,10 +37,20 @@ async function main() {
     }
 
     if (x == "C_INSTRUCTION") {
-      const destPart = dest(instructionString);
-      const compPart = comp(instructionString);
-      const jumpPart = jump(instructionString);
-      console.log(`dest: ${destPart}, comp: ${compPart}, jump: ${jumpPart}`)
+      const destMnemonic = destSymbol(instructionString);
+      const destBinary = destCode(destMnemonic);
+
+      const compMnemonic = compSymbol(instructionString);
+      const compBinary = compCode(compMnemonic);
+
+      const jumpMnemonic = jumpSymbol(instructionString);
+      const jumpBinary = jumpCode(jumpMnemonic);
+
+      console.log(
+        `dest: ${destMnemonic} - ${destBinary},\n`
+        + `comp: ${compMnemonic} - ${compBinary},\n`
+        + `jump: ${jumpMnemonic} - ${jumpBinary},\n`,
+      );
     }
   }
 
