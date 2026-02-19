@@ -14,48 +14,56 @@ import {
 
 import { destCode, compCode, jumpCode } from "./code.js";
 
+import fs from "node:fs/promises";
+
 // ----------------------------------------------------------------------------------
 
 async function main() {
-  const fileName = await getFileName();
-  const filePath = `./${fileName}`;
+  const inputFileName = await getFileName();
+  const inputFilePath = `./${inputFileName}`;
 
-  const fileContents = await getFileContents(filePath);
-  // console.log(fileContents);
-  const lines = fileContents.split("\n");
+  const outputFileName = inputFileName.split(".asm")[0] + ".hack";
+  const outputFilePath = `./${outputFileName}`;
+
+  const inputFileContents = await getFileContents(inputFilePath);
+
+  const instructionStringsArray = inputFileContents.split("\n");
 
   // advance();
 
-  for (let i = 0; i < lines.length; i++) {
-    const instructionString = lines[i].trim();
+  await fs.rm(outputFilePath);
+
+  for (let i = 0; i < instructionStringsArray.length; i++) {
+    const instructionString = instructionStringsArray[i].trim();
     const x = instructionType(instructionString);
-    console.log(`Line ${i} : ${x} : ${instructionString}`);
 
     if (x == "A_INSTRUCTION" || x == "L_INSTRUCTION") {
-      const y = symbol(instructionString);
-      console.log(`Symbol: ${y}`);
+      try {
+        const content = "0" + symbol(instructionString) + "\n";
+        await fs.appendFile(outputFilePath, content);
+      } catch (err) {
+        console.error("Error: ", err);
+      }
     }
 
     if (x == "C_INSTRUCTION") {
-      const destMnemonic = destSymbol(instructionString);
-      const destBinary = destCode(destMnemonic);
+      try {
+        const destMnemonic = destSymbol(instructionString);
+        const compMnemonic = compSymbol(instructionString);
+        const jumpMnemonic = jumpSymbol(instructionString);
 
-      const compMnemonic = compSymbol(instructionString);
-      const compBinary = compCode(compMnemonic);
+        const destBinary = destCode(destMnemonic);
+        const compBinary = compCode(compMnemonic);
+        const jumpBinary = jumpCode(jumpMnemonic);
 
-      const jumpMnemonic = jumpSymbol(instructionString);
-      const jumpBinary = jumpCode(jumpMnemonic);
+        const content = destBinary + compBinary + jumpBinary + "\n";
 
-      console.log(
-        `dest: ${destMnemonic} - ${destBinary},\n`
-        + `comp: ${compMnemonic} - ${compBinary},\n`
-        + `jump: ${jumpMnemonic} - ${jumpBinary},\n`,
-      );
+        await fs.appendFile(outputFilePath, content);
+      } catch (err) {
+        console.error("Error: ", err);
+      }
     }
   }
-
-  // const appendResult = await appendContent();
-  // console.log(appendResult);
 }
 
 main();
